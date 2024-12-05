@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 
                 const data = await response.json();
-                storyResult.innerHTML = `<p>${data.story}</p>`;
+                storyResult.innerHTML = data.story.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('');
                 resultContainer.classList.remove('hidden');
                 resultsNav.classList.remove('hidden');
                 hasStory = true;
@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 submitBtn.innerHTML = '<span>Napi rutin generálása</span><div class="spinner hidden"></div>';
                 currentPhase = 'routine';
+                dreamText.classList.add('hidden');
             } else {
                 const response = await fetch('/api/generate-routine', {
                     method: 'POST',
@@ -90,12 +91,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 routineBtn.classList.add('active');
                 storyBtn.classList.remove('active');
                 routinePromo.classList.remove('hidden');
+                
+                submitBtn.innerHTML = '<span>Újra</span>';
+                submitBtn.onclick = () => location.reload();
+                currentPhase = 'complete';
             }
         } catch (error) {
             console.error('Hiba történt:', error);
         } finally {
             loading.classList.add('hidden');
-            submitBtn.querySelector('.spinner').classList.add('hidden');
+            submitBtn.querySelector('.spinner')?.classList.add('hidden');
             submitBtn.disabled = false;
         }
     });
