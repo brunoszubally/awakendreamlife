@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="https://awakenhungary.hu" class="logo-link" target="_blank">
+                <img src="https://awakenhungary.hu/wp-content/uploads/2024/05/awakenlogo_final.png" alt="Awaken Hungary Logo" class="nav-logo">
+            </a>
+            <h1 class="nav-title">Awaken Hungary DreamLife Planner</h1>
+        </div>
+    </nav>
+    
+    <div class="container">
+        
+        <div class="content-wrapper">
+            <div class="left-column">
+                <div class="dream-input">
+                    <textarea id="dreamText" placeholder="Írd le az álmaidat és céljaidat..."></textarea>
+                    <button id="submitBtn">
+                        <span>Álmaid megírása</span>
+                        <div id="spinner" class="spinner hidden"></div>
+                    </button>
+                </div>
+            </div>
+
+            <div class="right-column">
+                <div id="loading" class="hidden">
+                    <div class="spinner"></div>
+                </div>
+
+                <div class="results-navigation hidden" id="resultsNav">
+                    <button class="nav-btn" id="storyBtn">Történet</button>
+                    <button class="nav-btn" id="routineBtn">Napi rutin</button>
+                </div>
+
+                <div class="results-container">
+                    <div id="resultContainer" class="hidden result-box">
+                        <h2>A te jövőbeli történeted</h2>
+                        <div id="storyResult"></div>
+                        <div class="awaken-promo hidden">
+                            <h3>Szeretnéd valóra váltani ezt az álmot?</h3>
+                            <p>Csatlakozz az Awaken Hungary Academy közösségéhez, ahol szakértők és hasonló gondolkodású emberek segítenek az álmaid megvalósításában!</p>
+                            <a href="https://awakenhungary.hu" target="_blank" class="cta-button">Fedezd fel az Awaken Hungary Academy-t</a>
+                        </div>
+                    </div>
+
+                    <div id="routineContainer" class="hidden result-box">
+                        <h2>A te napi rutinod</h2>
+                        <div id="routineResult"></div>
+                        <div class="awaken-promo hidden">
+                            <h3>Szeretnéd ezt a rutint valóra váltani?</h3>
+                            <p>Az Awaken Hungary Academy közösségében megtanulhatod, hogyan építs fenntartható szokásokat és érd el céljaidat!</p>
+                            <a href="https://awakenhungary.hu" target="_blank" class="cta-button">Csatlakozz a közösséghez</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Awaken Hungary. Minden jog fenntartva.</p>
+            <a href="https://awakenhungary.hu" target="_blank" class="footer-link">awakenhungary.hu</a>
+        </div>
+    </footer>
+</body>
+</html> 
