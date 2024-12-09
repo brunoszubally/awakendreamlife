@@ -19,7 +19,7 @@ def process_dreams():
     
     try:
         response = client.chat.completions.create(
-            model="gpt-4-mini",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": """Te egy kreatív író vagy, aki inspiráló és részletes történeteket ír. 
                 A feladatod az, hogy a felhasználó álmait és céljait egy élénk, első személyű történetté alakítsd át,
