@@ -23,7 +23,7 @@ def process_dreams():
             messages=[
                 {"role": "system", "content": """Te egy kreatív író vagy, aki inspiráló és részletes történeteket ír. 
                 A feladatod az, hogy a felhasználó álmait és céljait egy élénk, első személyű történetté alakítsd át,
-                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat. """},
+                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat. Konkrét neveket ne használj. """},
                 {"role": "user", "content": f"""
                 A következő céljaim és álmaim vannak: {dream_text}
                 
