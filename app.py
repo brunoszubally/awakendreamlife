@@ -19,11 +19,11 @@ def process_dreams():
     
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4-mini",
             messages=[
                 {"role": "system", "content": """Te egy kreatív író vagy, aki inspiráló és részletes történeteket ír. 
                 A feladatod az, hogy a felhasználó álmait és céljait egy élénk, első személyű történetté alakítsd át,
-                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat."""},
+                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat. """},
                 {"role": "user", "content": f"""
                 A következő céljaim és álmaim vannak: {dream_text}
                 
@@ -54,7 +54,7 @@ def generate_routine():
     
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": """Te egy professzionális életmód-coach vagy, aki segít az embereknek 
                 strukturált napi rutinokat kialakítani céljaik eléréséhez. A rutinoknak konkrétnak, követhetőnek 
@@ -64,9 +64,9 @@ def generate_routine():
                 
                 Készíts egy részletes, időpontokkal ellátott napi rutint, ami segít közelebb kerülni ezekhez a célokhoz.
                 A rutin legyen:
-                - Időpontokkal ellátva (reggeltől estig)
+                - Időpontokkal ellátva (reggeltől estig, összesen max 6-7 pontban)
                 - Realisztikus és követhető
-                - Tartalmazzon konkrét tevékenységeket
+                - Tartalmazzon konkrét tevékenységeket, vizualizációkat
                 - Legyen egyensúlyban a produktivitás és a pihenés
                 - Tartalmazzon olyan szokásokat, amik hosszú távon a célok felé visznek
                 
