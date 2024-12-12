@@ -2,11 +2,52 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 from openai import OpenAI
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+# Email beállítások
+SMTP_SERVER = "smtp.hostinger.com"
+SMTP_PORT = 587
+SENDER_EMAIL = os.getenv('SENDER_EMAIL')  # például: your-email@gmail.com
+SENDER_PASSWORD = os.getenv('SENDER_PASSWORD')  # App jelszó Gmail esetén
+RECIPIENT_EMAIL = os.getenv('RECIPIENT_EMAIL')  # ahova az adatokat küldjük
+
+def send_log_email(input_text, generated_text, endpoint):
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = SENDER_EMAIL
+        msg['To'] = RECIPIENT_EMAIL
+        msg['Subject'] = f"Új álom log - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        body = f"""
+        Időpont: {datetime.now()}
+        Endpoint: {endpoint}
+        IP: {request.remote_addr}
+        
+        Beküldött szöveg:
+        {input_text}
+        
+        Generált válasz:
+        {generated_text}
+        """
+        
+        msg.attach(MIMEText(body, 'plain'))
+        
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        
+    except Exception as e:
+        print(f"Email küldési hiba: {str(e)}")
 
 @app.route('/')
 def index():
@@ -36,12 +77,17 @@ def process_dreams():
         )
         
         story = response.choices[0].message.content
+        
+        # Email küldése a logokkal
+        send_log_email(dream_text, story, 'process-dreams')
 
         return jsonify({
             'story': story,
             'success': True
         })
     except Exception as e:
+        # Hiba esetén is küldjünk emailt
+        send_log_email(dream_text, str(e), 'process-dreams-error')
         return jsonify({
             'error': str(e),
             'success': False
