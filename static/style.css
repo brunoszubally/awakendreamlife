@@ -258,29 +258,106 @@ body {
     height: 100%;
 }
 
+.input-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    margin-bottom: var(--space-sm);
+    font-weight: 400;
+}
+
+.label-icon {
+    font-size: 1.4rem;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+.input-hint {
+    background: rgba(160, 136, 83, 0.1);
+    border-left: 3px solid var(--gold-light);
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    height: auto;
+    overflow: visible;
+}
+
 textarea {
     flex-grow: 1;
-    padding: 15px;
+    padding: var(--space-md);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--radius-sm);
     resize: none;
     font-family: var(--font-body);
     font-weight: 300;
-    font-size: 1em;
-    margin-bottom: 20px;
+    font-size: 1.05em;
+    line-height: 1.7;
+    margin-bottom: var(--space-md);
     background-color: rgba(26, 39, 56, 0.5);
     color: var(--text-light);
     transition: var(--transition);
+}
+
+textarea:empty {
+    box-shadow: 0 0 30px rgba(160, 136, 83, 0.1);
 }
 
 textarea:focus {
     outline: none;
     border-color: var(--gold-light);
     background: rgba(26, 39, 56, 0.7);
+    box-shadow: 0 0 20px rgba(160, 136, 83, 0.2);
 }
 
 textarea::placeholder {
     color: var(--text-muted);
+    font-style: italic;
+    white-space: pre-line;
+    overflow: hidden;
+}
+
+@keyframes pulse-placeholder {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+textarea:empty::placeholder {
+    animation: pulse-placeholder 3s ease-in-out infinite;
+}
+
+.name-input {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 1.05em;
+    margin-bottom: var(--space-lg);
+    background-color: rgba(26, 39, 56, 0.5);
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.name-input:focus {
+    outline: none;
+    border-color: var(--gold-light);
+    background: rgba(26, 39, 56, 0.7);
+    box-shadow: 0 0 20px rgba(160, 136, 83, 0.2);
+}
+
+.name-input::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
 }
 
 button {
@@ -416,21 +493,17 @@ button > * {
     margin-bottom: var(--space-md);
     color: var(--text-light);
     font-size: clamp(1rem, 2vw, 1.1rem);
-    line-height: 1.9;
-    text-align: justify;
+    line-height: 1.8;
+    text-align: left;
 }
 
-.result-box p:first-of-type::first-letter {
-    font-family: var(--font-heading);
-    font-size: 3.5em;
-    line-height: 0.8;
-    float: left;
-    margin: 0.1em 0.1em 0 0;
-    background: linear-gradient(135deg, var(--gold-light), var(--gold-pale));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+.result-box p strong,
+.result-box p b {
+    color: var(--gold-light);
+    font-weight: 600;
 }
+
+/* Drop cap eltávolítva - zavaró volt */
 
 .awaken-promo {
     margin-top: 30px;
@@ -560,8 +633,12 @@ button > * {
 
     .content-wrapper {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: var(--space-md);
         height: auto;
+    }
+
+    .content-wrapper.has-results {
+        grid-template-columns: 1fr;
     }
 
     .left-column, .right-column {
@@ -570,7 +647,7 @@ button > * {
     }
 
     .dream-input textarea {
-        min-height: 150px;
+        min-height: 250px;
         height: auto;
     }
 

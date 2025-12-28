@@ -31,7 +31,14 @@
         <div class="content-wrapper">
             <div class="left-column">
                 <div class="dream-input">
-                    <textarea id="dreamText" placeholder="Írd le az álmaidat és céljaidat..."></textarea>
+                    <label for="dreamText" class="input-label">
+                        <span class="label-icon">✨</span>
+                        Mesélj az álmaidról és céljaidról
+                    </label>
+                    <p class="input-hint">
+                        💡 Tipp: Minél részletesebb vagy, annál pontosabb lesz a történeted! Add meg a neved, párod nevét, gyerekeid nevét, és bármilyen fontos részletet az életedről.
+                    </p>
+                    <textarea id="dreamText" placeholder="Például: A nevem Anna, 32 éves vagyok és jelenleg marketing területen dolgozom. Párom neve Péter, aki mérnök. Szeretnénk egy sikeres online vállalkozást indítani, amely segít az embereknek... (írj minél több részletet!)"></textarea>
                     <button id="submitBtn">
                         <span>Álmaid megírása</span>
                         <div id="spinner" class="spinner hidden"></div>

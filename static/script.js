@@ -46,62 +46,121 @@ document.addEventListener('DOMContentLoaded', function() {
     routineBtn.addEventListener('click', showRoutine);
 
     submitBtn.addEventListener('click', async function() {
-        const text = dreamText.value;
+        const text = dreamText.value.trim();
+
+        if (!text) {
+            alert('Kérlek, írj be valamit az álmaidról!');
+            dreamText.focus();
+            return;
+        }
+
+        // Manifestációs üzenetek
+        const messages = [
+            '✨ Az univerzum hallgat rád...',
+            '🌟 Álmaid formát öltenek...',
+            '💫 A jövőd kristályosodik...',
+            '🔮 Manifesztáljuk a vágyaid...',
+            '⭐ Energiák összehangolása...',
+            '🌙 Álmok valósággá válása...',
+            '💎 Célok megjelenítése...'
+        ];
+
+        let messageIndex = 0;
+
         loading.classList.remove('hidden');
-        submitBtn.querySelector('.spinner').classList.remove('hidden');
         submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span>${messages[0]}</span><div class="spinner"></div>`;
         resultContainer.classList.add('hidden');
         routineContainer.classList.add('hidden');
-        
+        dreamText.disabled = true;
+
+        // Üzenetek váltogatása
+        const messageInterval = setInterval(() => {
+            messageIndex = (messageIndex + 1) % messages.length;
+            submitBtn.querySelector('span').textContent = messages[messageIndex];
+        }, 2000);
+
         try {
-            if (currentPhase === 'dreams') {
-                const response = await fetch('/api/process-dreams', {
+            // Generate both story and routine in parallel
+            const [storyResponse, routineResponse] = await Promise.all([
+                fetch('/api/process-dreams', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text })
-                });
-                
-                const data = await response.json();
-                storyResult.innerHTML = data.story.split('\n').map(paragraph => `<p>${paragraph}</p>`).join('');
-                resultContainer.classList.remove('hidden');
-                resultsNav.classList.remove('hidden');
-                hasStory = true;
-                storyBtn.classList.add('active');
-                storyPromo.classList.remove('hidden');
-                
-                submitBtn.innerHTML = '<span>Napi rutin generálása</span><div class="spinner hidden"></div>';
-                currentPhase = 'routine';
-                dreamText.classList.add('hidden');
-            } else {
-                const response = await fetch('/api/generate-routine', {
+                }),
+                fetch('/api/generate-routine', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ text })
-                });
-                
-                const data = await response.json();
-                routineResult.innerHTML = data.routine.map(item => `<p>${item}</p>`).join('');
-                routineContainer.classList.remove('hidden');
-                resultContainer.classList.add('hidden');
-                hasRoutine = true;
-                routineBtn.classList.add('active');
-                storyBtn.classList.remove('active');
-                routinePromo.classList.remove('hidden');
-                
-                submitBtn.innerHTML = '<span>Újra</span>';
-                submitBtn.onclick = () => location.reload();
-                currentPhase = 'complete';
-            }
+                })
+            ]);
+
+            const [storyData, routineData] = await Promise.all([
+                storyResponse.json(),
+                routineResponse.json()
+            ]);
+
+            // Üzenet animáció leállítása
+            clearInterval(messageInterval);
+
+            // Process story
+            let cleanedStory = storyData.story
+                .replace(/\*\*/g, '')
+                .replace(/\*/g, '')
+                .replace(/^#{1,6}\s+/gm, '');
+
+            storyResult.innerHTML = cleanedStory
+                .split('\n')
+                .filter(p => p.trim())
+                .map(paragraph => `<p>${paragraph.trim()}</p>`)
+                .join('');
+
+            // Process routine
+            let cleanedRoutine = routineData.routine.map(item =>
+                item.replace(/\*\*/g, '')
+                    .replace(/\*/g, '')
+                    .replace(/^#{1,6}\s+/gm, '')
+                    .trim()
+            );
+
+            routineResult.innerHTML = cleanedRoutine
+                .filter(item => item)
+                .map(item => `<p>${item}</p>`)
+                .join('');
+
+            // Show results
+            resultContainer.classList.remove('hidden');
+            resultsNav.classList.remove('hidden');
+            hasStory = true;
+            hasRoutine = true;
+            storyBtn.classList.add('active');
+            storyPromo.classList.remove('hidden');
+            routinePromo.classList.remove('hidden');
+
+            // Show right column
+            document.querySelector('.content-wrapper').classList.add('has-results');
+
+            // Görgetés a jobb oldali oszlop tetejére
+            setTimeout(() => {
+                const rightColumn = document.querySelector('.right-column');
+                if (rightColumn) {
+                    rightColumn.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }, 100);
+
+            // Update button
+            submitBtn.innerHTML = '<span>Új álom</span>';
+            submitBtn.onclick = () => location.reload();
+
         } catch (error) {
+            clearInterval(messageInterval);
             console.error('Hiba történt:', error);
+            alert('Hiba történt a generálás során. Kérlek, próbáld újra!');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<span>Álmaid megírása</span><div class="spinner hidden"></div>';
+            dreamText.disabled = false;
         } finally {
             loading.classList.add('hidden');
-            submitBtn.querySelector('.spinner')?.classList.add('hidden');
-            submitBtn.disabled = false;
         }
     });
 

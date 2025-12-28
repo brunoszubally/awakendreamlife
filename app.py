@@ -57,20 +57,21 @@ def index():
 def process_dreams():
     data = request.json
     dream_text = data.get('text', '')
-    
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": """Te egy kreatív író vagy, aki inspiráló és részletes történeteket ír. 
+                {"role": "system", "content": """Te egy kreatív író vagy, aki inspiráló és részletes történeteket ír.
                 A feladatod az, hogy a felhasználó álmait és céljait egy élénk, első személyű történetté alakítsd át,
-                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat. Konkrét neveket ne használj. """},
+                ami egy napot mutat be a jövőbeli életükből, amikor már elérték ezeket a célokat.
+                Ha a felhasználó megadja a nevét vagy más személyek nevét a leírásban, használd őket természetesen a történetben."""},
                 {"role": "user", "content": f"""
-                A következő céljaim és álmaim vannak: {dream_text}
-                
-                Írj egy részletes, első személyű történetet egy napomról a jövőből, amikor már megvalósítottam ezeket.
+                {dream_text}
+
+                Írj egy részletes, első személyű történetet egy napomról a jövőből, amikor már megvalósítottam ezeket a célokat.
                 A történet legyen realisztikus, inspiráló és pozitív hangulatú. Mutasd be, hogyan változott meg az életem
-                és milyen érzés elérni ezeket a célokat."""}
+                és milyen érzés elérni ezeket a célokat. Ha megadtam neveket vagy részleteket, használd őket a történetben."""}
             ],
             temperature=0.8,
             max_tokens=1500
@@ -97,17 +98,17 @@ def process_dreams():
 def generate_routine():
     data = request.json
     dream_text = data.get('text', '')
-    
+
     try:
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": """Te egy professzionális életmód-coach vagy, aki segít az embereknek 
-                strukturált napi rutinokat kialakítani céljaik eléréséhez. A rutinoknak konkrétnak, követhetőnek 
+                {"role": "system", "content": """Te egy professzionális életmód-coach vagy, aki segít az embereknek
+                strukturált napi rutinokat kialakítani céljaik eléréséhez. A rutinoknak konkrétnak, követhetőnek
                 és megvalósíthatónak kell lenniük."""},
                 {"role": "user", "content": f"""
-                Ezek a céljaim és álmaim: {dream_text}
-                
+                {dream_text}
+
                 Készíts egy részletes, időpontokkal ellátott napi rutint, ami segít közelebb kerülni ezekhez a célokhoz.
                 A rutin legyen:
                 - Időpontokkal ellátva (reggeltől estig, összesen max 6-7 pontban)
@@ -115,7 +116,7 @@ def generate_routine():
                 - Tartalmazzon konkrét tevékenységeket, vizualizációkat
                 - Legyen egyensúlyban a produktivitás és a pihenés
                 - Tartalmazzon olyan szokásokat, amik hosszú távon a célok felé visznek
-                
+
                 Formázd úgy, hogy minden sor egy konkrét időponttal kezdődjön."""}
             ],
             temperature=0.7,
