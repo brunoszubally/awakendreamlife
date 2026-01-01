@@ -95,6 +95,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
             ]);
 
+            // Check if responses are ok before parsing
+            if (!storyResponse.ok) {
+                const errorText = await storyResponse.text();
+                throw new Error(`Story API hiba: ${storyResponse.status} - ${errorText.substring(0, 100)}`);
+            }
+            if (!routineResponse.ok) {
+                const errorText = await routineResponse.text();
+                throw new Error(`Rutin API hiba: ${routineResponse.status} - ${errorText.substring(0, 100)}`);
+            }
+
             const [storyData, routineData] = await Promise.all([
                 storyResponse.json(),
                 routineResponse.json()
